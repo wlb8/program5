@@ -13,39 +13,51 @@ int main() {
     ifstream fin;
     ofstream fout;
     int count=0;
+    int countAudio = 0;
+    int countVideo = 0;
 
     fin.open("input.txt");
     fout.open("output.txt");
 
-    while (fin.good())
+    if (!fin.open())
+    {
+        cout << "Bad";
+    }
+
+    while (!fin.eof)
     {
         fin >> type;
-        if (type == 'A')
-        {
-            Audio* temp;
+        if (type == 'A') {
+            Audio *temp;
             temp->ReadData(fin);
             list[count] = temp;
-            count += 1;
+            countAudio += 1;
 
-        }
-        else if (type == 'V')
-        {
-            Video* temp;
+        } else if (type == 'V') {
+            Video *temp;
             temp->ReadData(fin);
             list[count] = temp;
-            count += 1;
+            countVideo += 1;
         }
+        count++;
+    }
+    fin.close();
 
-        for (int i = 0; i < 200; ++i)
+    for (int i = 0; i < count; ++i)
+    {
+        if (list[i]->GetType() == "Audio")
         {
-            cout << list[i]->GetAccount() << endl;
-            cout << "HELLO";
             list[i]->WriteData(fout);
         }
     }
-    fin.close();
+    for (int i = 0; i < count; ++i)
+    {
+        if (list[i]->GetType() == "Video")
+        {
+            list[i]->WriteData(fout);
+        }
+    }
     fout.close();
-
 
     return 0;
 }
